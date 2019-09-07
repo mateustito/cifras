@@ -8,7 +8,7 @@ Usa-se uma palavra-chave, e cada letra dela é a linha a ser usada da tabela, ta
 
 *Ex.:
 - texto claro (organizado): ATACARBASESUL
-- chave utilizada: LIMAOLIMAOLIM (do mesmo tamanho do texto claro)
+- palavra-chave: LIMAO (a chave é derivada dessa palavra, melhor dizendo, é uma concatenação dessa palavra)
 - cifragem: L (key) = linha 12, A (texto claro) = coluna 1 --> saída letra L
 - decifragem (inverso): L (key) = linha 12, L (texto cifrado) = coluna 1 --> saída A
 
