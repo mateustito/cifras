@@ -66,23 +66,23 @@ class Vigenere(Cifra):
             texto += _alfabeto[new_index]
         return texto
  
-    def encrypt(self, texto, chave):  #Cifra texto com a cifra de Vigenere
+    def cifragem(self, texto, chave):  #Cifra texto com a cifra de Vigenere
         # Normalizando texto e chave
         chave = self.testa_chave(chave, texto)
         texto = self.format_str(texto)
         saida = ''
 
-        for idx, char in enumerate(texto):   
+        for index, char in enumerate(texto):   
             # Indice da letra da Cifra
-            idx_chave = self.letras.find(chave[idx])
+            index_chave = self.letras.find(chave[index])
             # Alfabeto Cifrado
-            c_alfabeto = self.desloca_alfabeto(self.letras, idx_chave)
+            c_alfabeto = self.desloca_alfabeto(self.letras, index_chave)
 
-            idx_p = self.letras.find(char)
-            saida += c_alfabeto[idx_p]
+            index_p = self.letras.find(char)
+            saida += c_alfabeto[index_p]
         return saida
 
 if __name__ == "__main__":
     v = Vigenere()
-    print(v.encrypt("asegurancadeumsistemacriptograficoresidenachave",
+    print(v.cifragem("asegurancadeumsistemacriptograficoresidenachave",
         "ime"))
