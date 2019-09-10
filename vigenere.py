@@ -55,17 +55,19 @@ class Vigenere(Cifra):
     def cifragem(self, texto, chave):  #Cifra texto com a cifra de Vigenere
         # Normalizando texto e chave
         chave = self.testa_chave(chave, texto)
-        texto = self.format_str(texto)
         saida = ''
 
         for index, char in enumerate(texto):   
             # Indice da letra da Cifra
-            index_chave = self.letras.find(chave[index])
-            # Alfabeto Cifrado
-            c_alfabeto = self.desloca_alfabeto(self.letras, index_chave)
+            if chave[index] == ' ':
+                saida += ' '
+            else:
+                index_chave = self.letras.find(chave[index])
+                # Alfabeto Cifrado
+                c_alfabeto = self.desloca_alfabeto(self.letras, index_chave)
 
-            index_p = self.letras.find(char)
-            saida += c_alfabeto[index_p]
+                index_p = self.letras.find(char)
+                saida += c_alfabeto[index_p]
         return saida
     
     def decifragem(self, key, cipher):
@@ -97,5 +99,6 @@ if __name__ == "__main__":
     cipher = "I EIOGVIZGI PI CY WQEXMYE KDMXFSODENUGW DIAUHM ZE KTEDQ"
     keyword = "IME"
     key = v.testa_chave(keyword, plaintext)
+    
     print("Plaintext: {0}\nKey: {1}\nCipher: {2}".format(plaintext, key, cipher))
     print(v.decifragem(key, cipher))
