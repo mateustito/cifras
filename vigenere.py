@@ -33,32 +33,27 @@ class Vigenere(Cifra):
     def __init__(self):
         self.letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    def testa_chave(self, chave, texto): # colocar o tamanho da chave no mesmo tamanho do texto
-        j = 0
-        key = ""
-        for i in range(len(texto)):
-            if texto[i] != ' ':
-                key += chave[j]
-                j = (j+1) % len(chave)
-            else:
-                key += ' '
-        
+    def criarchave(self, chave, texto): # colocar o tamanho da chave no mesmo tamanho do texto
+        if len(chave) < len(texto): 
+            j = 0
+            key = ""
+            for i in range(len(texto)):
+                if texto[i] != ' ':
+                    key += chave[j]
+                    j = (j+1) % len(chave)
+                else:
+                    key += ' '
+        else:
+            raise ValueError("O tamanho da chave deve ser menor do que o do texto.")
         return key.upper()
-        """
-        if len(chave) < len(texto): # Ex.: ATACARBASESUL (13) > LIMAO (5) 
-            nova_chave = chave * int((len(texto) / len(chave))) # int 13/5 = 2 --> LIMAO * 2 = LIMAOLIMAO (10)
-            if len(nova_chave) < len(texto):
-                nova_chave += chave[:(len(texto)-len(nova_chave))] # LIMAOLIMAO (10) + LIM (3) = LIMAOLIMAOLIM
-            
-            return nova_chave.upper()
-        """
  
     def cifragem(self, texto, chave):  #Cifra texto com a cifra de Vigenere
-        # Normalizando texto e chave
-        chave = self.testa_chave(chave, texto)
+        if any(char.isdigit() for char in texto):
+        	raise ValueError("O texto so pode conter letras A-Z.")
         texto = texto.upper()
+        # Normalizando texto e chave
+        chave = self.criarchave(chave, texto)
         saida = ''
-
         for index, char in enumerate(texto):   
             # Indice da letra da Cifra
             if chave[index] == ' ':
@@ -67,7 +62,6 @@ class Vigenere(Cifra):
                 index_chave = self.letras.find(chave[index])
                 # Alfabeto Cifrado
                 c_alfabeto = self.desloca_alfabeto(self.letras, index_chave)
-
                 index_p = self.letras.find(char)
                 saida += c_alfabeto[index_p]
         return saida
@@ -95,19 +89,16 @@ class Vigenere(Cifra):
                 plaintext += _alphabet[new_index]
         return plaintext
 
-class MyTest(unittest.TestCase):
+if __name__ == "__main__":
     v = Vigenere()
-    plaintext = "a seguranca de um sistema criptografico reside na chave"
+    plaintext = "1 seguranca de um sistema criptografico reside na chave"
     plaintext = plaintext.upper()
     cipher = "I EIOGVIZGI PI CY WQEXMYE KDMXFSODENUGW DIAUHM ZE KTEDQ"
     keyword = "IME"
 
-    def test_cifragem(self):
-        self.assertEqual(self.v.cifragem(self.plaintext, self.keyword), self.cipher)
-    
-    def test_decifragem(self):
-        key = self.v.testa_chave(self.keyword, self.plaintext)
-        self.assertEqual(self.v.decifragem(key, self.cipher), self.plaintext)
 
-if __name__ == "__main__":
-    unittest.main()
+    print(v.cifragem(plaintext, keyword))
+    
+    # def test_decifragem(self):
+    #     key = self.v.criarchave(self.keyword, self.plaintext)
+    #     self.assertEqual(self.v.decifragem(key, self.cipher), self.plaintext)
