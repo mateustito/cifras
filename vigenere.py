@@ -41,6 +41,8 @@ class Vigenere(Cifra):
                 j = (j+1) % len(chave)
             else:
                 key += ' '
+        
+        return key.upper()
         """
         if len(chave) < len(texto): # Ex.: ATACARBASESUL (13) > LIMAO (5) 
             nova_chave = chave * int((len(texto) / len(chave))) # int 13/5 = 2 --> LIMAO * 2 = LIMAOLIMAO (10)
@@ -49,7 +51,22 @@ class Vigenere(Cifra):
             
             return nova_chave.upper()
         """
-        return key.upper()
+ 
+    def cifragem(self, texto, chave):  #Cifra texto com a cifra de Vigenere
+        # Normalizando texto e chave
+        chave = self.testa_chave(chave, texto)
+        texto = self.format_str(texto)
+        saida = ''
+
+        for index, char in enumerate(texto):   
+            # Indice da letra da Cifra
+            index_chave = self.letras.find(chave[index])
+            # Alfabeto Cifrado
+            c_alfabeto = self.desloca_alfabeto(self.letras, index_chave)
+
+            index_p = self.letras.find(char)
+            saida += c_alfabeto[index_p]
+        return saida
     
     def decifragem(self, key, cipher):
         """
