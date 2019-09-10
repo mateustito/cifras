@@ -1,5 +1,3 @@
-import math
-
 '''
 --- Cifra de Vigenère ---
 
