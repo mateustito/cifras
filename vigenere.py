@@ -24,10 +24,6 @@ Texto_Claro = Texto_Cifrado - Chave + 26 (mod 26)
 
 class Cifra(object):
 
-    def format_str(self, texto):
-
-        return texto.replace(' ', '').upper() # junta tudo e bota caixa alta
-
     def desloca_alfabeto(self, alfabeto, desloca):
 
         return alfabeto[desloca:] + alfabeto[:desloca] # montagem da tabela do alfabeto com o deslocamento
