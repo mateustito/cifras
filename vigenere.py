@@ -1,3 +1,4 @@
+import unittest
 '''
 --- Cifra de Vigenère ---
 
@@ -55,6 +56,7 @@ class Vigenere(Cifra):
     def cifragem(self, texto, chave):  #Cifra texto com a cifra de Vigenere
         # Normalizando texto e chave
         chave = self.testa_chave(chave, texto)
+        texto = texto.upper()
         saida = ''
 
         for index, char in enumerate(texto):   
@@ -93,12 +95,19 @@ class Vigenere(Cifra):
                 plaintext += _alphabet[new_index]
         return plaintext
 
-if __name__ == "__main__":
+class MyTest(unittest.TestCase):
     v = Vigenere()
     plaintext = "a seguranca de um sistema criptografico reside na chave"
+    plaintext = plaintext.upper()
     cipher = "I EIOGVIZGI PI CY WQEXMYE KDMXFSODENUGW DIAUHM ZE KTEDQ"
     keyword = "IME"
-    key = v.testa_chave(keyword, plaintext)
+
+    def test_cifragem(self):
+        self.assertEqual(self.v.cifragem(self.plaintext, self.keyword), self.cipher)
     
-    print("Plaintext: {0}\nKey: {1}\nCipher: {2}".format(plaintext, key, cipher))
-    print(v.decifragem(key, cipher))
+    def test_decifragem(self):
+        key = self.v.testa_chave(self.keyword, self.plaintext)
+        self.assertEqual(self.v.decifragem(key, self.cipher), self.plaintext)
+
+if __name__ == "__main__":
+    unittest.main()
