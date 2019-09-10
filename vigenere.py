@@ -72,9 +72,7 @@ class Vigenere(Cifra):
             else:
                 key_index = alphabet[key[index]]
                 cipher_index = alphabet[cipher[index]]
-                new_index = abs(26 - key_index) + cipher_index
-                if new_index > 25:
-                    new_index -= 26
+                new_index = (abs(26 - key_index) + cipher_index) % 26
                 plaintext += _alphabet[new_index]
         return plaintext
 
