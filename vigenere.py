@@ -34,6 +34,8 @@ class Vigenere(Cifra):
         self.letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
     def criar_chave(self, chave, texto): # colocar o tamanho da chave no mesmo tamanho do texto
+        if any(char.isdigit() for char in texto):
+        	raise ValueError("A chave so pode conter letras A-Z.")
         if len(chave) < len(texto): 
             j = 0
             key = ""
