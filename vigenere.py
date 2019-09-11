@@ -89,16 +89,23 @@ class Vigenere(Cifra):
                 plaintext += _alphabet[new_index]
         return plaintext
 
-if __name__ == "__main__":
+class MyTest(unittest.TestCase):
     v = Vigenere()
-    plaintext = "1 seguranca de um sistema criptografico reside na chave"
+    plaintext = "a seguranca de um sistema criptografico reside na chave"
     plaintext = plaintext.upper()
     cipher = "I EIOGVIZGI PI CY WQEXMYE KDMXFSODENUGW DIAUHM ZE KTEDQ"
     keyword = "IME"
 
-
-    print(v.cifragem(plaintext, keyword))
+    def test_cifragem(self):
+        with_number = "a seguranca d1 um sistema criptografico reside na chave"
+        try:
+            self.assertEqual(self.v.cifragem(with_number, self.keyword), self.cipher)
+        except ValueError:
+            self.assertEqual(self.v.cifragem(self.plaintext, self.keyword), self.cipher)
     
-    # def test_decifragem(self):
-    #     key = self.v.criarchave(self.keyword, self.plaintext)
-    #     self.assertEqual(self.v.decifragem(key, self.cipher), self.plaintext)
+    def test_decifragem(self):
+        key = self.v.testa_chave(self.keyword, self.plaintext)
+        self.assertEqual(self.v.decifragem(key, self.cipher), self.plaintext)
+
+if __name__ == "__main__":
+    unittest.main()
