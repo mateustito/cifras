@@ -33,7 +33,7 @@ class Vigenere(Cifra):
     def __init__(self):
         self.letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    def criarchave(self, chave, texto): # colocar o tamanho da chave no mesmo tamanho do texto
+    def criar_chave(self, chave, texto): # colocar o tamanho da chave no mesmo tamanho do texto
         if len(chave) < len(texto): 
             j = 0
             key = ""
@@ -52,7 +52,7 @@ class Vigenere(Cifra):
         	raise ValueError("O texto so pode conter letras A-Z.")
         texto = texto.upper()
         # Normalizando texto e chave
-        chave = self.criarchave(chave, texto)
+        chave = self.criar_chave(chave, texto)
         saida = ''
         for index, char in enumerate(texto):   
             # Indice da letra da Cifra
@@ -104,7 +104,7 @@ class MyTest(unittest.TestCase):
             self.assertEqual(self.v.cifragem(self.plaintext, self.keyword), self.cipher)
     
     def test_decifragem(self):
-        key = self.v.testa_chave(self.keyword, self.plaintext)
+        key = self.v.criar_chave(self.keyword, self.plaintext)
         self.assertEqual(self.v.decifragem(key, self.cipher), self.plaintext)
 
 if __name__ == "__main__":
