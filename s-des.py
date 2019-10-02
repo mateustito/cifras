@@ -62,7 +62,8 @@ def permutation(block):
 
 # mtb
 def function_k(block, key):
-    pass
+    '''new_block = permutation(substitution(exclusive_or(expansion_permutation(block), key)))
+    return new_block'''
 
 def switch_fuction(left_block, right_block):
     pass
