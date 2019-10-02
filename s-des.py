@@ -8,7 +8,7 @@ def key_generation(key):
     """
     Retorna as sub-chaves usadas nas rodadas do
     DES Simplificado
-    :param key: list()
+    :param key: bin() ou str()
                 Chave de 10 bits
     :return subkeys: list()
                 Lista com as sub-chaves
