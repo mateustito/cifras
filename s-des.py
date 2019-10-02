@@ -37,8 +37,14 @@ def inverse_permutation(block):
 def expansion_permutation(block):
     pass
 
-def exclusive_or(block, subkey):
-    pass
+# apoio da função F (Feistel)
+# block depois da expansao entra aqui
+def exclusive_or(block, subkey): # XOR entre valores Binarios
+    # cada 4 bits faz o xor com o 4 bits da chave da rodada
+    result = int(block, 2) ^ int(subkey, 2)
+    result = bin(result)
+    return '{:0>4}'.format(result[2:])
+    # depois daqui eh a parte da Substituição comas S-Boxes
 
 def substitution(block):
     pass
