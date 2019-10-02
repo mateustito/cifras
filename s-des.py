@@ -38,8 +38,7 @@ def initial_permutation(block):
     for i in key:
         output += block[i-1]
     result.append(output)
-
-    print(result)
+    return result
 
 # IP-1 Reverse: 4 1 3 5 7 2 8 6
 def inverse_permutation(block):
@@ -75,9 +74,3 @@ def sdes_encryption(plaintext_block, key):
 
 def sdes_decryption(ciphertext_block, key):
     pass
-
-def main ():
-	initial_permutation('10011100')
-    # retornando 01011010 - exemplo do prof OK !
-
-main()
