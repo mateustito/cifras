@@ -28,6 +28,7 @@ def text_to_blocks(bintext):
 def key_generation(key):
     pass
 
+# mtb
 def initial_permutation(block):
     pass
 
@@ -44,7 +45,7 @@ def exclusive_or(block, subkey): # XOR entre valores Binarios
     result = int(block, 2) ^ int(subkey, 2)
     result = bin(result)
     return '{:0>4}'.format(result[2:])
-    # depois daqui eh a parte da Substituição comas S-Boxes
+    # depois daqui eh a parte da Substituição com as S-Boxes
 
 def substitution(block):
     pass
@@ -52,6 +53,7 @@ def substitution(block):
 def permutation(block):
     pass
 
+# mtb
 def function_k(block, key):
     pass
 
