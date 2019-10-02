@@ -1,8 +1,7 @@
-def text_to_bin(plaintext):
-    pass
 
-def text_to_blocks(bintext):
-    pass
+def text_to_bin(plaintext):
+	#retorna uma lista de bits formada por blocos de 8 bits
+    return [bin(ord(x))[2:].zfill(8) for x in plaintext]
 
 def key_generation(key):
     """
@@ -64,7 +63,15 @@ def initial_permutation(block):
     pass
 
 def inverse_permutation(block):
-    pass
+    IPtable = (2, 6, 3, 1, 4, 8, 5, 7)
+    FPtable = (4, 1, 3, 5, 7, 2, 8, 6)
+    outputByte = 0
+    for index, elem in enumerate(FPtable):
+        if index >= elem:
+            outputByte |= (block & (128 >> (elem - 1))) >> (index - (elem - 1))
+        else:
+            outputByte |= (block & (128 >> (elem - 1))) << ((elem - 1) - index)
+    return outputByte
 
 def expansion_permutation(block):
     pass
@@ -72,8 +79,45 @@ def expansion_permutation(block):
 def exclusive_or(block, subkey):
     pass
 
+def split_list(a_list):
+    half = len(a_list)
+    return a_list[:half], a_list[half:]
+
 def substitution(block):
-    pass
+    sbox0 = [['1','0','3','2'],
+       		['3','2','1','0'],
+       		['0','2','1','3'],
+       		['3','1','3','2']]
+
+    sbox1 = [['0','1','2','3'],
+       		['2','0','1','3'],
+       		['3','0','1','0'],
+       		['2','1','0','3']]
+    head, tail = split_list(block)
+
+    #binario pra inteiro
+    h_row = int(head[0] + head[3], 2)
+    h_column = int(head[1] + head[2], 2)
+
+    t_row = int(tail[0] + tail[3], 2)
+    t_column = int(tail[1] + tail[2], 2)
+
+    #sboxs
+    h_value = sbox0[h_row][h_column]
+    t_value = sbox1[t_row][t_column]
+
+    #inteiro para binario
+    str1 = "{0:b}".format(int(h_value))
+    str2 = "{0:b}".format(int(t_value))
+
+    if str1 == "1" or str1 == "0":
+        str1 = "0" + str1
+
+    if str2 == "1" or str2 == "0":
+        str2 = "0" + str2
+
+    final = str1 + str2
+    return final
 
 def permutation(block):
     pass
@@ -82,7 +126,8 @@ def function_k(block, key):
     pass
 
 def switch_fuction(left_block, right_block):
-    pass
+    block = right_block + left_block
+    return block
 
 def sdes_encryption(plaintext_block, key):
     pass
