@@ -33,12 +33,10 @@ def key_generation(key):
 # 2 bit do block na posição 1 ... 6 bit block na posição 2 ...
 def initial_permutation(block):
     key = [2, 6 ,3, 1, 4, 8, 5, 7]
-    result = []
     output = ""
     for i in key:
         output += block[i-1]
-    result.append(output)
-    return result
+    return output
 
 # IP-1 Reverse: 4 1 3 5 7 2 8 6
 def inverse_permutation(block):
