@@ -28,10 +28,20 @@ def text_to_blocks(bintext):
 def key_generation(key):
     pass
 
-# mtb
+# permutação inicial para rodar o algoritmo
+# IP: 2 6 3 1 4 8 5 7 (8 bits)
+# 2 bit do block na posição 1 ... 6 bit block na posição 2 ...
 def initial_permutation(block):
-    pass
+    key = [2, 6 ,3, 1, 4, 8, 5, 7]
+    result = []
+    output = ""
+    for i in key:
+        output += block[i-1]
+    result.append(output)
 
+    print(result)
+
+# IP-1 Reverse: 4 1 3 5 7 2 8 6
 def inverse_permutation(block):
     pass
 
@@ -65,3 +75,9 @@ def sdes_encryption(plaintext_block, key):
 
 def sdes_decryption(ciphertext_block, key):
     pass
+
+def main ():
+	initial_permutation('10011100')
+    # retornando 01011010 - exemplo do prof OK !
+
+main()
