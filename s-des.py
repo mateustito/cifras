@@ -67,7 +67,23 @@ def inverse_permutation(block):
     pass
 
 def expansion_permutation(block):
-    pass
+    """
+    Realiza uma expansão e ao mesmo tempo uma permutação
+    no block de entrada
+
+    :param block: bin()
+                  Número binário de 4 bits
+    
+    :return ep: bin()
+                Resultado de expansão e permutação no bloco de entrada
+    """
+    
+    exp_per = [4, 1, 2, 3, 2, 3, 4, 1]
+    ep = ''
+    for index in exp_per:
+        ep += block[index - 1]
+    
+    return ep
 
 def exclusive_or(block, subkey):
     pass
