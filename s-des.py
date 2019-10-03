@@ -127,7 +127,21 @@ def substitution(block):
     pass
 
 def permutation(block):
-    pass
+    """
+    Realiza uma permutação nos bits de entrada
+
+    :param block: bin()
+                  Número binário de 4 bits
+
+    :return p: bin()
+               Número binário de 4 bits de entrada permutado
+    """
+    per = [2, 4, 3, 1]
+    p = ''
+    for index in per:
+        p += block[index - 1]
+    
+    return p
 
 # mtb
 def function_k(block, key):
