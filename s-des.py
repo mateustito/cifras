@@ -193,9 +193,8 @@ def permutation(block):
 
 # mtb
 def function_k(block, key):
-    '''new_block = permutation(substitution(exclusive_or(expansion_permutation(block), key)))
-    return new_block'''
-    pass
+    new_block = permutation(substitution(exclusive_or(expansion_permutation(block), key)))
+    return new_block
 
 def switch_fuction(left_block, right_block):
     block = right_block + left_block
