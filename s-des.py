@@ -81,7 +81,7 @@ def expansion_permutation(block):
     exp_per = [4, 1, 2, 3, 2, 3, 4, 1]
     ep = ''
     for index in exp_per:
-        ep += block[index]
+        ep += block[index - 1]
     
     return ep
 
