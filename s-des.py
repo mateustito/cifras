@@ -63,15 +63,15 @@ def initial_permutation(block):
     pass
 
 def inverse_permutation(block):
-    IPtable = (2, 6, 3, 1, 4, 8, 5, 7)
-    FPtable = (4, 1, 3, 5, 7, 2, 8, 6)
-    outputByte = 0
-    for index, elem in enumerate(FPtable):
-        if index >= elem:
-            outputByte |= (block & (128 >> (elem - 1))) >> (index - (elem - 1))
-        else:
-            outputByte |= (block & (128 >> (elem - 1))) << ((elem - 1) - index)
-    return outputByte
+    op_data  = (block << 3) & int('10000000', 2)  # 4
+    op_data |= (block >> 1) & int('01000000', 2)  # 1
+    op_data |= (block )     & int('00100000', 2)  # 3
+    op_data |= (block << 1) & int('00010000', 2)  # 5
+    op_data |= (block << 2) & int('00001000', 2)  # 7
+    op_data |= (block >> 4) & int('00000100', 2)  # 2
+    op_data |= (block << 1) & int('00000010', 2)  # 8
+    op_data |= (block >> 2) & int('00000001', 2)  # 6
+    return op_data;
 
 def expansion_permutation(block):
     pass
@@ -80,7 +80,7 @@ def exclusive_or(block, subkey):
     pass
 
 def split_list(a_list):
-    half = len(a_list)
+    half = ((len(a_list))//2)
     return a_list[:half], a_list[half:]
 
 def substitution(block):
@@ -93,6 +93,7 @@ def substitution(block):
        		['2','0','1','3'],
        		['3','0','1','0'],
        		['2','1','0','3']]
+       		
     head, tail = split_list(block)
 
     #binario pra inteiro
