@@ -115,7 +115,26 @@ def switch_fuction(left_block, right_block):
     pass
 
 def sdes_encryption(plaintext_block, key):
-    pass
+    """
+    Implementa o algoritmo de encriptação do DES Simplificado
+
+    :param plaintext_block: bin()
+                            Bloco do plaintext de 8 bits
+    :param key: bin()
+                Número binário de 10 bits
+    :return ciphertext_block: bin()
+                              Bloco do plaintext de entrada criptografado.
+    """
+    subkeys = key_generation(key)
+    b_per = initial_permutation(plaintext_block)
+    saida = function_k(b_per, subkeys[0])
+    s_switch = switch_fuction(saida[0], saida[1])
+    saida = function_k(saida, subkeys[1])
+    ciphertext_block = inverse_permutation(saida)
+
+    return ciphertext_block
+
+
 
 def sdes_decryption(ciphertext_block, key):
     pass
