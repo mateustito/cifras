@@ -117,6 +117,7 @@ def permutation(block):
 def function_k(block, key):
     '''new_block = permutation(substitution(exclusive_or(expansion_permutation(block), key)))
     return new_block'''
+    pass
 
 def switch_fuction(left_block, right_block):
     pass
@@ -125,11 +126,14 @@ def sdes_encryption(plaintext_block, key):
     pass
 
 def sdes_decryption(ciphertext_block, key):
-<<<<<<< HEAD
-    pass
-=======
-    pass
-
-if __name__ == "__main__":
-    print(key_generation('1010000010'))
->>>>>>> c6755546cb33c080da7942dfc6cdf80f5cac7ea5
+    '''
+    Implementação da decriptação do DES-Simplificado
+    '''
+    subkeys = key_generation(key) # gera as mesmas chaves da Encryption
+    b_per = initial_permutation(ciphertext_block) # IP
+    saida = function_k(b_per, subkeys[1]) # vai usar a chave 2
+    s_switch = switch_fuction(saida[0], saida[1]) # troca ordem dos blocos
+    saida = function_k(s_switch, subkeys[0])
+    plaintext_block = inverse_permutation(saida) # IP^-1
+    
+    return plaintext_block
