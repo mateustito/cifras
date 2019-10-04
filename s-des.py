@@ -91,7 +91,7 @@ def initial_permutation(block):
     output = ""
     for i in key:
         output += block[i-1]
-    return output
+    return split_list(output) # retorna uma lista permutada divida ao meio
 
 # IP-1 Reverse: 4 1 3 5 7 2 8 6
 def inverse_permutation(block):
@@ -192,7 +192,7 @@ def permutation(block):
     return p
 
 # mtb
-def function_k(block, key):
+def function_k(block, key): # a entrada na encryption eh o lado direito da func IP
     new_block = permutation(substitution(exclusive_or(expansion_permutation(block), key)))
     return new_block
 
