@@ -23,20 +23,21 @@ def bin_to_text(binario): # converter Binario para String
         k += 1
     return string
   
-# def text_to_bin(plaintext):
-# 	#retorna uma lista de bits formada por blocos de 8 bits
-#     return [bin(ord(x))[2:].zfill(8) for x in plaintext]
+def text_to_bin(plaintext):
+ 	#retorna uma lista de bits formada por blocos de 8 bits
+    return [bin(ord(x))[2:].zfill(8) for x in plaintext]
 
 def key_generation(key):
     """
     Retorna as sub-chaves usadas nas rodadas do
     DES Simplificado
-    :param key: bin() ou str()
+    :param key: bin()
                 Chave de 10 bits
     :return subkeys: list()
                 Lista com as sub-chaves
     """
     subkeys = list()
+    key = key[2:].zfill(10)
     p10 = [3,5,2,7,4,10,1,9,8,6]
     p8 = [6,3,7,4,8,5,10,9]
     output_p10 = list()
@@ -205,11 +206,11 @@ def sdes_encryption(plaintext_block, key):
     Implementa o algoritmo de encriptação do DES Simplificado
 
     :param plaintext_block: bin()
-                            Bloco do plaintext de 8 bits
+            Bloco do plaintext de 8 bits
     :param key: bin()
-                Número binário de 10 bits
+            Número binário de 10 bits
     :return ciphertext_block: bin()
-                              Bloco do plaintext de entrada criptografado.
+            Bloco do plaintext de entrada criptografado.
     """
     subkeys = key_generation(key)
     b_per = initial_permutation(plaintext_block)
@@ -234,3 +235,9 @@ def sdes_decryption(ciphertext_block, key):
     plaintext_block = inverse_permutation(saida) # IP^-1
     
     return plaintext_block
+
+if __name__ == "__main__":
+    plaintext = "Ola, prof Andre!"
+    key = bin(5)
+    subkeys = key_generation(key)
+    print(subkeys)
