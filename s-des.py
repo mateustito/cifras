@@ -23,7 +23,7 @@ def bin_to_text(binario): # converter Binario para String
         k += 1
     return string
   
-def text_to_bin(plaintext):
+def text_to_blocks(plaintext):
  	#retorna uma lista de bits formada por blocos de 8 bits
     return [bin(ord(x))[2:].zfill(8) for x in plaintext]
 
@@ -239,5 +239,5 @@ def sdes_decryption(ciphertext_block, key):
 if __name__ == "__main__":
     plaintext = "Ola, prof Andre!"
     key = bin(5)
-    subkeys = key_generation(key)
-    print(subkeys)
+
+    sdes_encryption()
