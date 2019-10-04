@@ -214,10 +214,11 @@ def sdes_encryption(plaintext_block, key):
     """
     subkeys = key_generation(key)
     b_per = initial_permutation(plaintext_block)
-    saida = function_k(b_per, subkeys[0])
-    s_switch = switch_fuction(saida[0], saida[1])
-    saida = function_k(saida, subkeys[1])
-    ciphertext_block = inverse_permutation(saida)
+    output = function_k(b_per, subkeys[0])
+    output_switch = switch_fuction(output[0], output[1])
+    output_aux = function_k(output_switch, subkeys[1])
+    output = output_aux[0] + output_aux[1]
+    ciphertext_block = inverse_permutation(output)
 
     return ciphertext_block
 
@@ -239,5 +240,8 @@ def sdes_decryption(ciphertext_block, key):
 if __name__ == "__main__":
     plaintext = "Ola, prof Andre!"
     key = bin(5)
-
-    sdes_encryption()
+    blocks = text_to_blocks(plaintext)
+    ciphertext = list()
+    for block in blocks:
+        ciphertext.append(sdes_encryption(block, key))
+    print(ciphertext)
