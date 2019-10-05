@@ -192,8 +192,11 @@ def permutation(block):
     return p
 
 # mtb
-def function_k(block, key): # a entrada na encryption eh o lado direito da func IP
-    new_block = permutation(substitution(exclusive_or(expansion_permutation(block), key)))
+def function_k(block, key):
+    half = ((len(block))//2)
+    b_esq = block[:half] # lado esquerdo do block
+    b_dir = block[half:] # lado direito do block
+    new_block = exclusive_or(permutation(substitution(exclusive_or(expansion_permutation(b_dir), key))), b_esq)
     return new_block
 
 def switch_fuction(left_block, right_block):
