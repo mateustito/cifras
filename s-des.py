@@ -196,11 +196,7 @@ def permutation(block):
 
 # mtb
 def function_k(block, key):
-    saida = expansion_permutation(block[1])
-    saida = exclusive_or(saida, key)
-    saida = substitution(saida)
-    saida = permutation(saida)
-    new_block = exclusive_or2( block[0], saida)
+    new_block = exclusive_or2( block[0], permutation(substitution(exclusive_or(expansion_permutation(block[1]), key))))
     return new_block, block[1]
 
 def switch_fuction(left_block, right_block):
