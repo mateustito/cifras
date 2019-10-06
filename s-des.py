@@ -91,7 +91,7 @@ def initial_permutation(block):
     output = ""
     for i in key:
         output += block[i-1]
-    return output
+    return split_list(output) # retorna uma lista permutada divida ao meio
 
 # IP-1 Reverse: 4 1 3 5 7 2 8 6
 def inverse_permutation(block):
@@ -193,7 +193,10 @@ def permutation(block):
 
 # mtb
 def function_k(block, key):
-    new_block = permutation(substitution(exclusive_or(expansion_permutation(block), key)))
+    half = ((len(block))//2)
+    b_esq = block[:half] # lado esquerdo do block
+    b_dir = block[half:] # lado direito do block
+    new_block = exclusive_or(permutation(substitution(exclusive_or(expansion_permutation(b_dir), key))), b_esq)
     return new_block
 
 def switch_fuction(left_block, right_block):
