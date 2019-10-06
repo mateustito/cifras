@@ -95,7 +95,7 @@ def initial_permutation(block):
     output = ""
     for i in key:
         output += block[i-1]
-    return split_list(output)
+    return split_list(output) # retorna uma lista permutada divida ao meio
 
 # IP-1 Reverse: 4 1 3 5 7 2 8 6
 def inverse_permutation(block):
