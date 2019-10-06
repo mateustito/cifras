@@ -23,20 +23,24 @@ def bin_to_text(binario): # converter Binario para String
         k += 1
     return string
   
-# def text_to_bin(plaintext):
-# 	#retorna uma lista de bits formada por blocos de 8 bits
-#     return [bin(ord(x))[2:].zfill(8) for x in plaintext]
+def text_to_blocks(plaintext):
+ 	#retorna uma lista de bits formada por blocos de 8 bits
+    return [bin(ord(x))[2:].zfill(8) for x in plaintext]
+
+def bin_to_blocks(ciphertext):
+    return [ciphertext[i:8+i] for i in range(0, len(ciphertext), 8)]
 
 def key_generation(key):
     """
     Retorna as sub-chaves usadas nas rodadas do
     DES Simplificado
-    :param key: bin() ou str()
+    :param key: bin()
                 Chave de 10 bits
     :return subkeys: list()
                 Lista com as sub-chaves
     """
     subkeys = list()
+    key = key[2:].zfill(10)
     p10 = [3,5,2,7,4,10,1,9,8,6]
     p8 = [6,3,7,4,8,5,10,9]
     output_p10 = list()
@@ -95,15 +99,11 @@ def initial_permutation(block):
 
 # IP-1 Reverse: 4 1 3 5 7 2 8 6
 def inverse_permutation(block):
-    op_data  = (block << 3) & int('10000000', 2)  # 4
-    op_data |= (block >> 1) & int('01000000', 2)  # 1
-    op_data |= (block )     & int('00100000', 2)  # 3
-    op_data |= (block << 1) & int('00010000', 2)  # 5
-    op_data |= (block << 2) & int('00001000', 2)  # 7
-    op_data |= (block >> 4) & int('00000100', 2)  # 2
-    op_data |= (block << 1) & int('00000010', 2)  # 8
-    op_data |= (block >> 2) & int('00000001', 2)  # 6
-    return op_data;
+    iip = [4, 1, 3, 5, 7, 2, 8, 6]
+    output = ''
+    for index in iip:
+        output += block[index - 1]
+    return split_list(output)
 
 def expansion_permutation(block):
     """
@@ -130,8 +130,13 @@ def exclusive_or(block, subkey): # XOR entre valores Binarios
     # cada 4 bits faz o xor com o 4 bits da chave da rodada
     result = int(block, 2) ^ int(subkey, 2)
     result = bin(result)
-    return '{:0>4}'.format(result[2:])
+    return '{0}'.format(result[2:].zfill(8))
     # depois daqui eh a parte da Substituição com as S-Boxes
+
+def exclusive_or2(block1, block2):
+    result = int(block1, 2) ^ int(block2, 2)
+    result = bin(result)
+    return '{0}'.format(result[2:].zfill(4))
 
 def split_list(a_list):
     half = ((len(a_list))//2)
@@ -149,11 +154,9 @@ def substitution(block):
        		['2','1','0','3']]
        		
     head, tail = split_list(block)
-
     #binario pra inteiro
     h_row = int(head[0] + head[3], 2)
     h_column = int(head[1] + head[2], 2)
-
     t_row = int(tail[0] + tail[3], 2)
     t_column = int(tail[1] + tail[2], 2)
 
@@ -193,28 +196,64 @@ def permutation(block):
 
 # mtb
 def function_k(block, key):
-    half = ((len(block))//2)
-    b_esq = block[:half] # lado esquerdo do block
-    b_dir = block[half:] # lado direito do block
-    new_block = exclusive_or(permutation(substitution(exclusive_or(expansion_permutation(b_dir), key))), b_esq)
-    return new_block
+    new_block = exclusive_or2( block[0], permutation(substitution(exclusive_or(expansion_permutation(block[1]), key))))
+    return new_block, block[1]
 
 def switch_fuction(left_block, right_block):
-    block = right_block + left_block
-    return block
+    return right_block, left_block
 
 def sdes_encryption(plaintext_block, key):
-    pass
+    """
+    Implementa o algoritmo de encriptação do DES Simplificado
+
+    :param plaintext_block: bin()
+            Bloco do plaintext de 8 bits
+    :param key: bin()
+            Número binário de 10 bits
+    :return ciphertext_block: bin()
+            Bloco do plaintext de entrada criptografado.
+    """
+    subkeys = key_generation(key)
+    block_per = initial_permutation(plaintext_block)
+    output = function_k(block_per, subkeys[0])
+    output_switch = switch_fuction(output[0], output[1])
+    output_aux = function_k(output_switch, subkeys[1])
+    output = output_aux[0] + output_aux[1]
+    ciphertext_block = inverse_permutation(output)
+
+    return ciphertext_block[0] + ciphertext_block[1]
+
+
 
 def sdes_decryption(ciphertext_block, key):
     '''
     Implementação da decriptação do DES-Simplificado
     '''
-    subkeys = key_generation(key) # gera as mesmas chaves da Encryption
-    b_per = initial_permutation(ciphertext_block) # IP
-    saida = function_k(b_per, subkeys[1]) # vai usar a chave 2
-    s_switch = switch_fuction(saida[0], saida[1]) # troca ordem dos blocos
-    saida = function_k(s_switch, subkeys[0])
-    plaintext_block = inverse_permutation(saida) # IP^-1
-    
-    return plaintext_block
+    subkeys = key_generation(key)
+    block_per = initial_permutation(ciphertext_block)
+    output = function_k(block_per, subkeys[1])
+    output_switch = switch_fuction(output[0], output[1])
+    output_aux = function_k(output_switch, subkeys[0])
+    output = output_aux[0] + output_aux[1]
+    plaintext_block = inverse_permutation(output)
+
+    return plaintext_block[0] + plaintext_block[1]
+
+if __name__ == "__main__":
+    print("+++++++++++++++++++DES SIMPLIFICADO +++++++++++++++\n")
+    plaintext = "Olá, prof. André!"
+    key = bin(5)
+    print("(Remetente) Plaintext: ", plaintext)
+    print("Key: {0}".format(key[2:].zfill(10)))
+    blocks = text_to_blocks(plaintext)
+    ciphertext = ''
+    for block in blocks:
+        ciphertext += sdes_encryption(block, key)
+    print("Ciphertext: ", ciphertext)
+
+    blocks = bin_to_blocks(ciphertext)
+    plaintext = ''
+    for block in blocks:
+        plaintext += bin_to_text(sdes_decryption(block, key))
+    print("(Destinatário) Plaintext: ", plaintext)
+    print("\n++++++++++++++++++++++++++++++++++++++++++++++++")
