@@ -240,20 +240,20 @@ def sdes_decryption(ciphertext_block, key):
     return plaintext_block[0] + plaintext_block[1]
 
 if __name__ == "__main__":
+    print("+++++++++++++++++++DES SIMPLIFICADO +++++++++++++++\n")
     plaintext = "Olá, prof. André!"
     key = bin(5)
-    print("Remetente-Plaintext: ", plaintext)
-    print("Key: ", key)
+    print("(Remetente) Plaintext: ", plaintext)
+    print("Key: {0}".format(key[2:].zfill(10)))
     blocks = text_to_blocks(plaintext)
-    print("Plaintext Blocks: ", blocks)
     ciphertext = ''
     for block in blocks:
         ciphertext += sdes_encryption(block, key)
-    print(ciphertext)
+    print("Ciphertext: ", ciphertext)
 
     blocks = bin_to_blocks(ciphertext)
-    print("Ciphertext Blocks: ", blocks)
     plaintext = ''
     for block in blocks:
         plaintext += bin_to_text(sdes_decryption(block, key))
-    print("Destinatário-Plaintext: ", plaintext)
+    print("(Destinatário) Plaintext: ", plaintext)
+    print("\n++++++++++++++++++++++++++++++++++++++++++++++++")
