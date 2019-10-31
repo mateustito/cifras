@@ -3,3 +3,4 @@
 
 - Cifra de Vigenère
 - DES-Simplificado
+- RC4
