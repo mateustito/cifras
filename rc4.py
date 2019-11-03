@@ -15,29 +15,32 @@ def ksa(key):
     
     return S
 
-def prga(S, plaintext):
+def prga(S, inputtext):
     i,j = 0,0
-    ciphertext = []
-    for char in plaintext:
+    outputtext = ''
+    for char in inputtext:
 
         i = (i+1)%256
         j = (j+S[i]) %256
         S[i],S[j] = S[j],S[i]
-
-        aux = format(ord(chr(S[(S[i]+S[j])%256] ^ ord(char))),'x')
-        ciphertext.append(aux)
+        outputtext += chr(S[(S[i]+S[j])%256] ^ ord(char))
     
-    return ciphertext
+    return outputtext
+
+key = "candre" #input('Key: ')
+plaintext = input('\nDigite o que deseja cifrar: ')
+S = ksa(key)
+ciphertext= prga(S, plaintext)
+print("\nPlaintext: {0}\nKey: {1}\nCiphertext obtido: {2}\n".format(plaintext, key, ciphertext))
 
 
-key = "candre"
+
+c = input("Deseja decifrar outro texto que não seja o 'Ciperhtext obtido'? S - Sim | <Outro>- Não \n")
+if c == 'S':
+    ciphertext = input('\nDigite o que deseja decifrar: ')
+    key = input("Key: ")
 
 S = ksa(key)
-ciphertext = prga(S, input('\nDigite o que deseja cifrar: '))
+plaintext = prga(S, ciphertext)
 
-print("\nTexto cifrado: " )
-
-for x in ciphertext:
-    print(x, end = ' ')
-
-print("\n")
+print("\nCiphertext: {0}\nKey: {1}\nPlaintext obtido: {2}\n".format(ciphertext, key, plaintext))
