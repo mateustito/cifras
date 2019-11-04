@@ -2,7 +2,7 @@ import random #utilizado para geração de numeros randômicos
 
 ## Chave Publica
 n = 0
-e = 65537 #Para o sistema ficar protegido de alguns tipos de ataque sugere-se este valo = 2^16+1
+e = 65537 #Para o sistema ficar protegido de alguns tipos de ataque sugere-se este valor = 2^16+1
 
 cartorio = {}
 def encryption(e, m, n):
