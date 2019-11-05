@@ -2,6 +2,7 @@ cartorio = {}
 
 e = 65537 # valor de "e" recomendado ao RSA
 KEY_LENGTH = 1024 # tamanho da chave
+DEFAULT_BLOCK_SIZE = 128 # tamanho do bloco em bytes
 
 def mdc(a, b):
     # Calcular o MDC entre dois números
@@ -26,11 +27,15 @@ def modinv(b, n):
 # Cifragem --> mensagem ^ e mod N
 # N = p * q (p e q são dois números primos)
 # Chave pública = (e, N)
-def encryption(e, N, plain_text):
-    # vai encriptando cada letra do plaintext
-    cypher_text = [pow(ord(m), e, N) for m in plain_text]
-    # retorna uma lista das letras encriptadas
-    return cypher_text
+def encryption(plaintext, e, N, blockSize = DEFAULT_BLOCK_SIZE):
+    # converter a mensagem em blocos
+    encryptedBlocks = []
+
+    # aplica block^e mod N em todos os blocos
+    for block in text_to_blocks(plaintext, blockSize):
+        encryptedBlocks.append(pow(block,e,N))
+
+    return encryptedBlocks
 
 # Decifragem --> mensagem ^ d mod N
 # phi(N) = (p-1) * (q-1)
@@ -39,11 +44,33 @@ def encryption(e, N, plain_text):
 def decryption(d, m, n):
     return (m ** d) % n
 
-def text_to_blocks():
-    pass
+# usado na criptografia, onde cada bloco sera aplicado a encript
+def text_to_blocks(plaintext, blockSize = DEFAULT_BLOCK_SIZE):
+    messageBytes = plaintext.encode('ascii')
+    
+    blockInts = []
+    for blockStart in range(0, len(messageBytes), blockSize):
+        blockInt = 0
+        for i in range (blockStart, min(blockStart + blockSize, len(messageBytes))):
+            blockInt += messageBytes[i]*(256 ** (i % blockSize))
+        blockInts.append(blockInt)
+    
+    return blockInts
 
-def blocks_to_text():
-    pass
+# usado na Descriptografia
+def blocks_to_text(blocks, msgLenght, blockSize = DEFAULT_BLOCK_SIZE):
+    message = []
+    for block in blocks:
+        blockMessage = []
+        for i in range(blockSize - 1, -1, -1):
+            if len(message) + i < msgLenght:
+                # reverter de Ascii
+                asciiNumber = block // (256 ** i)
+                block = block % (256 ** i)
+                blockMessage.insert(0, chr(asciiNumber))
+        message.extend(blockMessage)
+        
+    return ''.join(message)
 
 def encrypt_blocks():
     pass
@@ -63,6 +90,7 @@ def private_key():
 if __name__ == "__main__":
     plain_text = "mateus tito eh orientando do professor candre batista de carvalho"
     
-    n = 187 # soh pra teste, o N deve ser gerado
+    blocks = text_to_blocks(plain_text, DEFAULT_BLOCK_SIZE)
     
-    print(encryption(e, n, plain_text))
+    print(text_to_blocks(plain_text, DEFAULT_BLOCK_SIZE))
+    print(blocks_to_text(blocks, len(plain_text), DEFAULT_BLOCK_SIZE))
