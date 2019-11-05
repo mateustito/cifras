@@ -1,3 +1,5 @@
+import random
+
 cartorio = {}
 
 e = 65537 # valor de "e" recomendado ao RSA
@@ -73,7 +75,15 @@ def decrypt_blocks():
     pass
 
 def random_number():
-    pass
+    n = random.randint(0, pow(10, 100))
+    if n % 2 == 0:
+        n = n + 1
+    while not is_probable_prime(n):
+        n += 2
+    if n == 1:
+        n = n + 1
+    
+    return (n)
 
 def inv_mult(a, p):
     x = 1
