@@ -4,7 +4,6 @@ import random #utilizado para geração de numeros randômicos
 n = 0
 e = 65537 #Para o sistema ficar protegido de alguns tipos de ataque sugere-se este valor = 2^16+1
 
-cartorio = {}
 def encryption(e, m, n):
     return (m ** e) % n
 
@@ -33,13 +32,20 @@ def random_number():
         n = n + 1
     return (n)
 
-def public_key():
+def inv_mult(a, p):
+    x = 1
+    for x in range(1, p+1):
+        if ((a*x)%p) == 1:
+            return x
+
+def keys():
     p = random_number()
     q = random_number()
     while p == q:
         q = random_number() 
-    _n = p*q
-    return _n
+    n = p*q
+    d = inv_mult(e, ((p-1) * (q-1)))
+    return (d, n)
 
 def is_probable_prime(n,k=40):
 	#Teste de primalidade Miller-Rabin 
@@ -67,10 +73,23 @@ def is_probable_prime(n,k=40):
             return False
     return True
 
-def private_key():
-    pass
-
 if __name__ == "__main__":
-    n = public_key() #gera a chave pública
+    d , n = keys()
+    m = "Hello, world!"
+    
+    c = encryption(e, m, n) 
+    p = decryption(d, c, n)
+    answer = input("Deseja gerar os valores de (e,d,n) automaticamente? S- Sim <Outro>- Não")
+    if answer != 'S':
+        e = int(input("Digite o valor para e"))
+        d = int(input("Digite o valor de d:"))
+        n = int(input("Digite o valor de n:"))
+    m = input("Digite a mensagem a ser encriptada: ")
+    c = encryption(e, m, n) 
+    print("Texto claro: {0}\nChave Pública: ({1}, {2})\nTexto cifrado obtido: {5}\n".format(m,e,n,c))
+    answer = input("Deseja obter o texto claro a partir do texto cifrado obtido? S- Sim <Outro>- Não")
+    if answer != 'S':
+        c = input("Digite o texto cifrado desejado:")
+    print("Texto cifrado: {0}\nChave Privada: ({3}, {4})\nTexto claro obtido: {5}\n".format(c,d,n,m))
     
 
