@@ -27,7 +27,7 @@ def random_number():
     n = random.randint(0, pow(10, 100))
     if n % 2 == 0:
         n = n + 1
-    while not is_probable_prime(n, 64):
+    while not is_probable_prime(n):
         n += 2
     if n == 1:
         n = n + 1
@@ -37,9 +37,7 @@ def public_key():
     p = random_number()
     q = random_number()
     while p == q:
-        q = random_number()
-    print(p)
-    print(q)    
+        q = random_number() 
     _n = p*q
     return _n
 
