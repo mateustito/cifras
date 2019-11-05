@@ -1,20 +1,70 @@
-import random #utilizado para geração de numeros randômicos
+cartorio = {}
 
-## Chave Publica
-n = 0
-e = 65537 #Para o sistema ficar protegido de alguns tipos de ataque sugere-se este valor = 2^16+1
+e = 65537 # valor de "e" recomendado ao RSA
+KEY_LENGTH = 1024 # tamanho da chave
+DEFAULT_BLOCK_SIZE = 128 # tamanho do bloco em bytes
 
-def encryption(e, m, n):
-    return (m ** e) % n
+def mdc(a, b):
+    # Calcular o MDC entre dois números
+    while b != 0:
+        a, b = b, a % b
+    return a
 
-def decryption(d, m, n):
-    return (m ** d) % n
+def euclides_ext(a, b):
+    # Calcular Euclides Extendido entre dois números
+    if a == 0:
+        return (b, 0, 1)
+    
+    g, y, x = euclides_ext(b % a, a)
+    return (g, x - (b // a) * y, y)
 
-def text_to_blocks():
-    pass
+# Cifragem --> mensagem ^ e mod N
+# N = p * q (p e q são dois números primos)
+# Chave pública = (e, N)
+def encryption(plaintext, e, N, blockSize = DEFAULT_BLOCK_SIZE):
+    # converter a mensagem em blocos
+    encryptedBlocks = []
 
-def blocks_to_text():
-    pass
+    # aplica block^e mod N em todos os blocos
+    for block in text_to_blocks(plaintext, blockSize):
+        encryptedBlocks.append(pow(block,e,N))
+
+    return encryptedBlocks
+
+# Decifragem --> mensagem ^ d mod N
+# phi(N) = (p-1) * (q-1)
+# e * d = 1 * (mod phi(N)) --> inverso multiplicativo
+# Chave privada = (N, d)
+#def decryption(d, m, n):
+    #return (m ** d) % n
+
+# usado na criptografia, onde cada bloco sera aplicado a encript
+def text_to_blocks(plaintext, blockSize = DEFAULT_BLOCK_SIZE):
+    messageBytes = plaintext.encode('ascii')
+    
+    blockInts = []
+    for blockStart in range(0, len(messageBytes), blockSize):
+        blockInt = 0
+        for i in range (blockStart, min(blockStart + blockSize, len(messageBytes))):
+            blockInt += messageBytes[i]*(256 ** (i % blockSize))
+        blockInts.append(blockInt)
+    
+    return blockInts
+
+# usado na Descriptografia
+def blocks_to_text(blocks, msgLenght, blockSize = DEFAULT_BLOCK_SIZE):
+    message = []
+    for block in blocks:
+        blockMessage = []
+        for i in range(blockSize - 1, -1, -1):
+            if len(message) + i < msgLenght:
+                # reverter de Ascii
+                asciiNumber = block // (256 ** i)
+                block = block % (256 ** i)
+                blockMessage.insert(0, chr(asciiNumber))
+        message.extend(blockMessage)
+        
+    return ''.join(message)
 
 def encrypt_blocks():
     pass
@@ -23,14 +73,7 @@ def decrypt_blocks():
     pass
 
 def random_number():
-    n = random.randint(0, pow(10, 100))
-    if n % 2 == 0:
-        n = n + 1
-    while not is_probable_prime(n):
-        n += 2
-    if n == 1:
-        n = n + 1
-    return (n)
+    pass
 
 def inv_mult(a, p):
     x = 1
@@ -75,10 +118,6 @@ def is_probable_prime(n,k=40):
 
 if __name__ == "__main__":
     d , n = keys()
-    m = "Hello, world!"
-    
-    c = encryption(e, m, n) 
-    p = decryption(d, c, n)
     answer = input("Deseja gerar os valores de (e,d,n) automaticamente? S- Sim <Outro>- Não")
     if answer != 'S':
         e = int(input("Digite o valor para e"))
@@ -91,5 +130,3 @@ if __name__ == "__main__":
     if answer != 'S':
         c = input("Digite o texto cifrado desejado:")
     print("Texto cifrado: {0}\nChave Privada: ({3}, {4})\nTexto claro obtido: {5}\n".format(c,d,n,m))
-    
-
