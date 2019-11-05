@@ -127,16 +127,18 @@ def is_probable_prime(n,k=40):
     return True
 
 if __name__ == "__main__":
-    d , n = keys()
+    
     answer = input("Deseja gerar os valores de (e,d,n) automaticamente? S- Sim <Outro>- Não")
     if answer != 'S':
         e = int(input("Digite o valor para e"))
         d = int(input("Digite o valor de d:"))
         n = int(input("Digite o valor de n:"))
+    else:
+	d , n = keys()
     m = input("Digite a mensagem a ser encriptada: ")
-    c = encryption(e, m, n) 
-    print("Texto claro: {0}\nChave Pública: ({1}, {2})\nTexto cifrado obtido: {5}\n".format(m,e,n,c))
+    c = encryption(m,e, n) 
+    print("Texto claro: {0}\nChave Pública: ({1}, {2})\nTexto cifrado obtido: {3}\n".format(m,e,n,c))
     answer = input("Deseja obter o texto claro a partir do texto cifrado obtido? S- Sim <Outro>- Não")
     if answer != 'S':
         c = input("Digite o texto cifrado desejado:")
-    print("Texto cifrado: {0}\nChave Privada: ({3}, {4})\nTexto claro obtido: {5}\n".format(c,d,n,m))
+    print("Texto cifrado: {0}\nChave Privada: ({1}, {2})\nTexto claro obtido: {3}\n".format(c,d,n,m))
