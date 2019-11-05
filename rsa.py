@@ -18,12 +18,6 @@ def euclides_ext(a, b):
     g, y, x = euclides_ext(b % a, a)
     return (g, x - (b // a) * y, y)
 
-def modinv(b, n):
-    # Inverso de um número na Aritmetica Modular
-    g, x, _ = euclides_ext(b, n)
-    if g == 1:
-        return x % n
-
 # Cifragem --> mensagem ^ e mod N
 # N = p * q (p e q são dois números primos)
 # Chave pública = (e, N)
@@ -41,8 +35,8 @@ def encryption(plaintext, e, N, blockSize = DEFAULT_BLOCK_SIZE):
 # phi(N) = (p-1) * (q-1)
 # e * d = 1 * (mod phi(N)) --> inverso multiplicativo
 # Chave privada = (N, d)
-def decryption(d, m, n):
-    return (m ** d) % n
+#def decryption(d, m, n):
+    #return (m ** d) % n
 
 # usado na criptografia, onde cada bloco sera aplicado a encript
 def text_to_blocks(plaintext, blockSize = DEFAULT_BLOCK_SIZE):
@@ -81,16 +75,62 @@ def decrypt_blocks():
 def random_number():
     pass
 
-def public_key():
-    pass
+def inv_mult(a, p):
+    x = 1
+    for x in range(1, p+1):
+        if ((a*x)%p) == 1:
+            return x
 
-def private_key():
-    pass
+def keys():
+    p = random_number()
+    q = random_number()
+    while p == q:
+        q = random_number() 
+    n = p*q
+    d = inv_mult(e, ((p-1) * (q-1)))
+    return (d, n)
+
+def is_probable_prime(n,k=40):
+	#Teste de primalidade Miller-Rabin 
+	# k = 40 numero recomendado de rounds de teste
+    if n == 2:
+        return True
+
+    if n % 2 == 0:
+        return False
+
+    r, s = 0, n - 1
+    while s % 2 == 0:
+        r += 1
+        s //= 2
+    for _ in range(k):
+        a = random.randrange(2, n - 1)
+        x = pow(a, s, n)
+        if x == 1 or x == n - 1:
+            continue
+        for _ in range(r - 1):
+            x = pow(x, 2, n)
+            if x == n - 1:
+                break
+        else:
+            return False
+    return True
 
 if __name__ == "__main__":
-    plain_text = "mateus tito eh orientando do professor candre batista de carvalho"
+    d , n = keys()
+    m = "Hello, world!"
     
-    blocks = text_to_blocks(plain_text, DEFAULT_BLOCK_SIZE)
-    
-    print(text_to_blocks(plain_text, DEFAULT_BLOCK_SIZE))
-    print(blocks_to_text(blocks, len(plain_text), DEFAULT_BLOCK_SIZE))
+    c = encryption(e, m, n) 
+    p = decryption(d, c, n)
+    answer = input("Deseja gerar os valores de (e,d,n) automaticamente? S- Sim <Outro>- Não")
+    if answer != 'S':
+        e = int(input("Digite o valor para e"))
+        d = int(input("Digite o valor de d:"))
+        n = int(input("Digite o valor de n:"))
+    m = input("Digite a mensagem a ser encriptada: ")
+    c = encryption(e, m, n) 
+    print("Texto claro: {0}\nChave Pública: ({1}, {2})\nTexto cifrado obtido: {5}\n".format(m,e,n,c))
+    answer = input("Deseja obter o texto claro a partir do texto cifrado obtido? S- Sim <Outro>- Não")
+    if answer != 'S':
+        c = input("Digite o texto cifrado desejado:")
+    print("Texto cifrado: {0}\nChave Privada: ({3}, {4})\nTexto claro obtido: {5}\n".format(c,d,n,m))
