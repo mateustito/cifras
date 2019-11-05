@@ -118,10 +118,6 @@ def is_probable_prime(n,k=40):
 
 if __name__ == "__main__":
     d , n = keys()
-    m = "Hello, world!"
-    
-    c = encryption(e, m, n) 
-    p = decryption(d, c, n)
     answer = input("Deseja gerar os valores de (e,d,n) automaticamente? S- Sim <Outro>- Não")
     if answer != 'S':
         e = int(input("Digite o valor para e"))
