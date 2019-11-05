@@ -27,8 +27,9 @@ def prga(S, inputtext):
     
     return outputtext
 
-key = "candre" #input('Key: ')
+
 plaintext = input('\nDigite o que deseja cifrar: ')
+key = input('Key: ')
 S = ksa(key)
 ciphertext= prga(S, plaintext)
 print("\nPlaintext: {0}\nKey: {1}\nCiphertext obtido: {2}\n".format(plaintext, key, ciphertext))
