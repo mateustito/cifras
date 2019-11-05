@@ -4,7 +4,6 @@ import random #utilizado para geração de numeros randômicos
 n = 0
 e = 65537 #Para o sistema ficar protegido de alguns tipos de ataque sugere-se este valor = 2^16+1
 
-cartorio = {}
 def encryption(e, m, n):
     return (m ** e) % n
 
@@ -33,13 +32,20 @@ def random_number():
         n = n + 1
     return (n)
 
-def public_key():
+def inv_mult(a, p):
+    x = 1
+    for x in range(1, p+1):
+        if ((a*x)%p) == 1:
+            return x
+
+def keys():
     p = random_number()
     q = random_number()
     while p == q:
         q = random_number() 
-    _n = p*q
-    return _n
+    n = p*q
+    d = inv_mult(e, ((p-1) * (q-1)))
+    return (d, n)
 
 def is_probable_prime(n,k=40):
 	#Teste de primalidade Miller-Rabin 
@@ -67,10 +73,10 @@ def is_probable_prime(n,k=40):
             return False
     return True
 
-def private_key():
-    pass
-
 if __name__ == "__main__":
-    n = public_key() #gera a chave pública
+    d , n = keys()
+    m = "Hello, world!"
+    c = encryption(e, m, n) 
+    p = decryption(d, c, n)
     
 
